@@ -5,7 +5,7 @@ name: 'ibor_analytics'
 version: '1.0.0'
  
 # This setting configures which "profile" dbt uses for this project.
-profile: 'deploy_dbt_ibor'
+profile: 'ibor_analytics'
  
 # These configurations specify where dbt should look for different types of files.
 # The `model-paths` config, for example, states that models in this project can be
@@ -34,23 +34,40 @@ seeds:
     +schema: raw_data
     +quote_columns: false
  
+snapshots:
+  ibor_analytics:
+    +target_schema: snapshots
+    +strategy: timestamp
+    +updated_at: updated_at
  
 models:
   ibor_analytics:
     # Staging layer - raw data cleaned and typed
-    staging:
+    Bronze:
       +materialized: view
-      +schema: staging
-      +tags: ['staging']
+      +schema: Bronze
+      +tags: ['Bronze']
      
     # Intermediate layer - business logic transformations
-    intermediate:
+    Silver:
       +materialized: view
-      +schema: intermediate
-      +tags: ['intermediate']
+      +schema: Silver
+      +tags: ['Silver']
      
     # Marts layer - final business entities
-    marts:
+    Gold:
       +materialized: table
-      +schema: marts
-      +tags: ['marts']
+      +schema: Gold
+      +tags: ['Gold']
+ 
+    Core:
+      +materialized: table
+      +tags: ['Gold', 'Core']
+ 
+    Portfolio:
+      +materialized: table
+      +tags: ['Gold', 'Portfolio']
+   
+    Risk:
+      +materialized: table
+      +tags: ['Gold', 'Risk']

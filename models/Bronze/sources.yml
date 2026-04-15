@@ -1,11 +1,11 @@
 version: 2
-
+ 
 sources:
   - name: raw_data
     description: "Raw data loaded from seed files into Snowflake. In production, this would be data from OMS, custodian feeds, and market data vendors."
-    database: IBOR_DB
+    database: CAPSTONE_PRJ
     schema: PUBLIC_RAW_DATA
-    
+   
     tables:
       - name: securities_master
         description: "Master data for all tradeable securities including stocks, bonds, and other instruments"
@@ -38,12 +38,12 @@ sources:
             description: "Market capitalization category"
           - name: exchange
             description: "Primary exchange where security trades"
-        
+       
         # Freshness check - warn if data is stale
         freshness:
           warn_after: {count: 1, period: day}
           error_after: {count: 7, period: day}
-      
+     
       - name: portfolios
         description: "Portfolio master data containing portfolio configurations and metadata"
         columns:
@@ -72,10 +72,10 @@ sources:
             description: "Benchmark index for performance comparison"
           - name: risk_profile
             description: "Risk profile (Conservative, Moderate, Aggressive)"
-        
+       
         freshness:
           warn_after: {count: 7, period: day}
-      
+     
       - name: transactions
         description: "All portfolio transactions including buys, sells, and other trade activity"
         columns:
@@ -130,13 +130,13 @@ sources:
             description: "Timestamp when transaction was created"
           - name: updated_at
             description: "Timestamp when transaction was last updated"
-        
+       
         freshness:
           warn_after: {count: 1, period: hour}
           error_after: {count: 24, period: hour}
-        
+       
         loaded_at_field: created_at
-      
+     
       - name: market_prices
         description: "Daily market prices for securities from market data vendors"
         columns:
@@ -174,13 +174,13 @@ sources:
             description: "Price data source (Bloomberg, Reuters, etc.)"
           - name: created_at
             description: "Timestamp when price was loaded"
-        
+       
         freshness:
           warn_after: {count: 1, period: day}
           error_after: {count: 2, period: day}
-        
+       
         loaded_at_field: created_at
-      
+     
       - name: fx_rates
         description: "Foreign exchange rates for currency conversion"
         columns:
@@ -201,7 +201,7 @@ sources:
               - not_null
           - name: source
             description: "FX rate source (Reuters, Bloomberg, etc.)"
-        
+       
         freshness:
           warn_after: {count: 1, period: day}
           error_after: {count: 2, period: day}
